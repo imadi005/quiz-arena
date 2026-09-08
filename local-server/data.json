@@ -125,6 +125,20 @@
       "marks": 1,
       "difficulty": "Medium",
       "category": "General"
+    },
+    {
+      "questionId": "q1788891557345",
+      "questionText": "Which technique converts categorical values into binary columns?",
+      "options": [
+        "Gradient Descent",
+        "One-Hot Encoding",
+        "Backpropagation",
+        "PCA"
+      ],
+      "correctAnswer": 1,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
     }
   ],
   "quizzes": [
