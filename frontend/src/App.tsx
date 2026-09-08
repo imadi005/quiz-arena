@@ -4,6 +4,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { SetNewPasswordPage } from '@/pages/auth/SetNewPasswordPage'
 import { StudentDashboardPage } from '@/pages/student/DashboardPage'
+import { SamplePage } from '@/pages/student/SamplePage'
 import { QuizPage } from '@/pages/student/QuizPage'
 import { ResultPage } from '@/pages/student/ResultPage'
 import { AdminDashboardPage } from '@/pages/admin/DashboardPage'
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/set-password" element={<SetNewPasswordPage />} />
+          <Route path="/sample" element={<SamplePage />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/result" element={<ResultPage />} />
 

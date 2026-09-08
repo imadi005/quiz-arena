@@ -46,7 +46,7 @@ export function LoginPage() {
         return
       }
       sessionStorage.setItem('quizRollNumber', rn)
-      navigate('/quiz')
+      navigate('/sample')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not start the test. Try again.')
     } finally {
