@@ -15,6 +15,7 @@ export function LoginPage() {
   const [mode, setMode] = useState<Mode>('student')
 
   const [rollNumber, setRollNumber] = useState('')
+  const [firstName, setFirstName] = useState('')
 
   const [email, setEmail] = useState('')
   const [adminPassword, setAdminPassword] = useState('')
@@ -24,8 +25,9 @@ export function LoginPage() {
 
   const handleStudentStart = async () => {
     const rn = rollNumber.trim().toUpperCase()
-    if (!rn) {
-      setError('Enter your roll number to begin.')
+    const name = firstName.trim()
+    if (!rn || !name) {
+      setError('Enter your roll number and first name to begin.')
       return
     }
 
@@ -42,6 +44,7 @@ export function LoginPage() {
         navigate('/result', {
           state: {
             rollNumber: rn,
+            name,
             score: status.bestScore,
             totalMarks: status.totalMarks,
             attemptsUsed: status.attemptsUsed,
@@ -53,6 +56,7 @@ export function LoginPage() {
       }
 
       sessionStorage.setItem('quizRollNumber', rn)
+      sessionStorage.setItem('quizName', name)
       sessionStorage.setItem('quizId', quizStatus.quizId)
       sessionStorage.setItem('quizDuration', String(quizStatus.duration))
       navigate('/sample')
@@ -165,13 +169,22 @@ export function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           {mode === 'student' ? (
-            <Input
-              label="Roll Number"
-              placeholder="KJ23MCA001"
-              autoComplete="username"
-              value={rollNumber}
-              onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
-            />
+            <>
+              <Input
+                label="Roll Number"
+                placeholder="KJ23MCA001"
+                autoComplete="username"
+                value={rollNumber}
+                onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
+              />
+              <Input
+                label="First Name"
+                placeholder="Rahul"
+                autoComplete="given-name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </>
           ) : (
             <>
               <Input

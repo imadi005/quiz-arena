@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 
 interface ResultState {
   rollNumber: string
+  name?: string
   score: number | null
   totalMarks: number
   attemptsUsed: number
@@ -21,7 +22,7 @@ export function ResultPage() {
     return null
   }
 
-  const { rollNumber, score, totalMarks, attemptsUsed, attemptsRemaining, locked, autoEnded } = state
+  const { rollNumber, name, score, totalMarks, attemptsUsed, attemptsRemaining, locked, autoEnded } = state
   const accuracy = totalMarks && score !== null ? Math.round((score / totalMarks) * 1000) / 10 : null
 
   return (
@@ -30,7 +31,9 @@ export function ResultPage() {
         <h1 className="font-display text-xl font-bold text-ink">
           {locked ? 'No attempts remaining' : 'Test submitted'}
         </h1>
-        <p className="mt-1.5 font-mono-num text-sm text-ink-faint">{rollNumber}</p>
+        <p className="mt-1.5 font-mono-num text-sm text-ink-faint">
+          {name ? `${name} (${rollNumber})` : rollNumber}
+        </p>
         {autoEnded && (
           <p className="mt-3 rounded-lg bg-signal-blue/10 px-3 py-2 text-xs text-signal-blue">
             The admin ended this quiz — your answers were submitted automatically.

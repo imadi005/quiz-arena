@@ -15,6 +15,7 @@ function formatTime(seconds: number) {
 export function QuizPage() {
   const navigate = useNavigate()
   const rollNumber = sessionStorage.getItem('quizRollNumber')
+  const name = sessionStorage.getItem('quizName') ?? rollNumber ?? ''
   const quizId = sessionStorage.getItem('quizId')
   const durationMinutes = Number(sessionStorage.getItem('quizDuration'))
   const durationSeconds = durationMinutes > 0 ? durationMinutes * 60 : DEFAULT_DURATION_SECONDS
@@ -91,11 +92,12 @@ export function QuizPage() {
     setError(null)
     try {
       const orderedAnswers = qs.map((_, i) => answersRef.current[i] ?? -1)
-      const result = await quizApi.submit(quizId, rollNumber, rollNumber, orderedAnswers)
+      const result = await quizApi.submit(quizId, rollNumber, name, orderedAnswers)
       sessionStorage.removeItem('quizRollNumber')
+      sessionStorage.removeItem('quizName')
       sessionStorage.removeItem('quizId')
       sessionStorage.removeItem('quizDuration')
-      navigate('/result', { state: { rollNumber, autoEnded, ...result } })
+      navigate('/result', { state: { rollNumber, name, autoEnded, ...result } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not submit. Try again.')
       setSubmitting(false)
@@ -130,7 +132,7 @@ export function QuizPage() {
     <div className="mx-auto max-w-2xl px-6 py-10">
       <div className="mb-4 flex items-center justify-between">
         <p className="font-mono-num text-sm text-ink-faint">
-          {rollNumber} · Question {current + 1} / {questions.length}
+          {name} ({rollNumber}) · Question {current + 1} / {questions.length}
         </p>
         <p
           className={[

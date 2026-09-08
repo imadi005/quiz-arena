@@ -64,7 +64,8 @@ export function AdminLeaderboardPage() {
                     {entry.rank <= 3 ? medal[entry.rank - 1] : entry.rank}
                   </span>
                   <div>
-                    <p className="font-mono-num text-sm font-medium text-ink">{entry.rollNumber}</p>
+                    <p className="text-sm font-medium text-ink">{entry.name}</p>
+                    <p className="font-mono-num text-xs text-ink-faint">{entry.rollNumber}</p>
                   </div>
                 </div>
                 <div className="text-right">

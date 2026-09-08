@@ -12,6 +12,7 @@ const SAMPLE_QUESTION = {
 export function SamplePage() {
   const navigate = useNavigate()
   const rollNumber = sessionStorage.getItem('quizRollNumber')
+  const name = sessionStorage.getItem('quizName') ?? rollNumber ?? ''
   const [selected, setSelected] = useState<number | null>(null)
 
   if (!rollNumber) {
@@ -22,7 +23,9 @@ export function SamplePage() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
       <div className="mb-4 flex items-center justify-between">
-        <p className="font-mono-num text-sm text-ink-faint">{rollNumber} · Practice question</p>
+        <p className="font-mono-num text-sm text-ink-faint">
+          {name} ({rollNumber}) · Practice question
+        </p>
         <span className="rounded-full bg-signal-blue/15 px-3 py-1 text-xs font-semibold text-signal-blue">
           Not scored
         </span>
