@@ -1,0 +1,10 @@
+{
+  "questions": [
+    { "questionId": "q1", "questionText": "Which AWS service provides object storage?", "options": ["Amazon EC2", "Amazon S3", "Amazon RDS", "Amazon VPC"], "correctAnswer": 1, "marks": 1, "difficulty": "Easy", "category": "AWS" },
+    { "questionId": "q2", "questionText": "Which service is a fully managed NoSQL database?", "options": ["Amazon RDS", "Amazon Redshift", "Amazon DynamoDB", "Amazon Aurora"], "correctAnswer": 2, "marks": 1, "difficulty": "Medium", "category": "Database" },
+    { "questionId": "q3", "questionText": "What does IAM stand for?", "options": ["Internal Access Manager", "Identity and Access Management", "Instance Access Module", "Integrated App Manager"], "correctAnswer": 1, "marks": 1, "difficulty": "Easy", "category": "AWS" },
+    { "questionId": "q4", "questionText": "Which command lists running Docker containers?", "options": ["docker ls", "docker ps", "docker list", "docker show"], "correctAnswer": 1, "marks": 1, "difficulty": "Medium", "category": "Docker" }
+  ],
+  "attempts": {},
+  "names": {}
+}
