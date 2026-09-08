@@ -13,20 +13,6 @@
       "marks": 1,
       "difficulty": "Easy",
       "category": "AWS"
-    },
-    {
-      "questionId": "q4",
-      "questionText": "Which command lists running Docker containers?",
-      "options": [
-        "docker ls",
-        "docker ps",
-        "docker list",
-        "docker show"
-      ],
-      "correctAnswer": 1,
-      "marks": 1,
-      "difficulty": "Medium",
-      "category": "Docker"
     }
   ],
   "quizzes": [
