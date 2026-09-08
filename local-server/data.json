@@ -13,6 +13,20 @@
       "marks": 1,
       "difficulty": "Medium",
       "category": "General"
+    },
+    {
+      "questionId": "q1788891085553",
+      "questionText": "Which technique is used to reduce overfitting in Machine Learning?",
+      "options": [
+        "Tokenization",
+        "Compilation",
+        "Regularization",
+        "Encoding"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
     }
   ],
   "quizzes": [
