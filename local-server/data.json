@@ -313,6 +313,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-08T18:54:07.272Z"
         }
+      ],
+      "25BAIB53": [
+        {
+          "score": 7,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-08T18:57:41.850Z"
+        }
       ]
     }
   },
@@ -320,6 +327,7 @@
     "KJ23MCA001": "KJ23MCA001",
     "26MCAD30": "26MCAD30",
     "26MCAA17": "Dev",
-    "26BBAF02": "Agrim Gupta"
+    "26BBAF02": "Agrim Gupta",
+    "25BAIB53": "Parmit singh"
   }
 }
