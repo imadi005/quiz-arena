@@ -57,6 +57,12 @@ export function ResultPage() {
           fullWidth
           onClick={() => {
             sessionStorage.removeItem('quizRollNumber')
+            sessionStorage.removeItem('quizName')
+            sessionStorage.removeItem('quizId')
+            sessionStorage.removeItem('quizDuration')
+            sessionStorage.removeItem('quizEndAt')
+            sessionStorage.removeItem('quizAnswers')
+            sessionStorage.removeItem('quizCurrent')
             navigate('/login')
           }}
         >

@@ -55,6 +55,9 @@ export function LoginPage() {
         return
       }
 
+      sessionStorage.removeItem('quizEndAt')
+      sessionStorage.removeItem('quizAnswers')
+      sessionStorage.removeItem('quizCurrent')
       sessionStorage.setItem('quizRollNumber', rn)
       sessionStorage.setItem('quizName', name)
       sessionStorage.setItem('quizId', quizStatus.quizId)

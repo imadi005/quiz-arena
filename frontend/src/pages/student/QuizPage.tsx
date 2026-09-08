@@ -20,12 +20,37 @@ export function QuizPage() {
   const durationMinutes = Number(sessionStorage.getItem('quizDuration'))
   const durationSeconds = durationMinutes > 0 ? durationMinutes * 60 : DEFAULT_DURATION_SECONDS
 
+  // Survive a page refresh mid-test: the timer is anchored to an absolute end
+  // time (not a countdown that resets to full duration on reload), and answers
+  // / current question are restored from sessionStorage instead of starting over.
+  const endAt = (() => {
+    const stored = Number(sessionStorage.getItem('quizEndAt'))
+    if (stored > Date.now()) return stored
+    const fresh = Date.now() + durationSeconds * 1000
+    sessionStorage.setItem('quizEndAt', String(fresh))
+    return fresh
+  })()
+
   const [questions, setQuestions] = useState<PublicQuestion[] | null>(null)
-  const [answers, setAnswers] = useState<Record<number, number>>({})
-  const [current, setCurrent] = useState(0)
-  const [secondsLeft, setSecondsLeft] = useState(durationSeconds)
+  const [answers, setAnswers] = useState<Record<number, number>>(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('quizAnswers') ?? '{}')
+    } catch {
+      return {}
+    }
+  })
+  const [current, setCurrent] = useState(() => Number(sessionStorage.getItem('quizCurrent')) || 0)
+  const [secondsLeft, setSecondsLeft] = useState(() => Math.max(0, Math.round((endAt - Date.now()) / 1000)))
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    sessionStorage.setItem('quizAnswers', JSON.stringify(answers))
+  }, [answers])
+
+  useEffect(() => {
+    sessionStorage.setItem('quizCurrent', String(current))
+  }, [current])
 
   // Avoids the submit-on-timeout closure capturing stale state.
   const answersRef = useRef(answers)
@@ -55,14 +80,12 @@ export function QuizPage() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          clearInterval(timer)
-          if (!submittingRef.current) void handleSubmit(false)
-          return 0
-        }
-        return s - 1
-      })
+      const remaining = Math.max(0, Math.round((endAt - Date.now()) / 1000))
+      setSecondsLeft(remaining)
+      if (remaining <= 0) {
+        clearInterval(timer)
+        if (!submittingRef.current) void handleSubmit(false)
+      }
     }, 1000)
     return () => clearInterval(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +120,9 @@ export function QuizPage() {
       sessionStorage.removeItem('quizName')
       sessionStorage.removeItem('quizId')
       sessionStorage.removeItem('quizDuration')
+      sessionStorage.removeItem('quizEndAt')
+      sessionStorage.removeItem('quizAnswers')
+      sessionStorage.removeItem('quizCurrent')
       navigate('/result', { state: { rollNumber, name, autoEnded, ...result } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not submit. Try again.')
