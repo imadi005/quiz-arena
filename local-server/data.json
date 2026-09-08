@@ -1,60 +1,284 @@
 {
   "questions": [
     {
-      "questionId": "q1",
-      "questionText": "Which AWS service provides object storage?",
+      "questionId": "q1788891046015",
+      "questionText": "Which algorithm is commonly used for binary classification?",
       "options": [
-        "Amazon EC2",
-        "Amazon S3",
-        "Amazon RDS",
-        "Amazon VPC"
+        "K-Means",
+        "Logistic Regression",
+        "Apriori",
+        "PCA"
       ],
       "correctAnswer": 1,
       "marks": 1,
-      "difficulty": "Easy",
-      "category": "AWS"
+      "difficulty": "Medium",
+      "category": "General"
     },
     {
-      "questionId": "q2",
-      "questionText": "Which service is a fully managed NoSQL database?",
+      "questionId": "q1788891085553",
+      "questionText": "Which technique is used to reduce overfitting in Machine Learning?",
       "options": [
-        "Amazon RDS",
-        "Amazon Redshift",
-        "Amazon DynamoDB",
-        "Amazon Aurora"
+        "Tokenization",
+        "Compilation",
+        "Regularization",
+        "Encoding"
       ],
       "correctAnswer": 2,
       "marks": 1,
       "difficulty": "Medium",
-      "category": "Database"
+      "category": "General"
     },
     {
-      "questionId": "q3",
-      "questionText": "What does IAM stand for?",
+      "questionId": "q1788891157542",
+      "questionText": "Which algorithm is primarily used for clustering?",
       "options": [
-        "Internal Access Manager",
-        "Identity and Access Management",
-        "Instance Access Module",
-        "Integrated App Manager"
+        "Linear Regression",
+        "Decision Tree",
+        "Naive Bayes",
+        "K-Means"
       ],
-      "correctAnswer": 1,
+      "correctAnswer": 3,
       "marks": 1,
-      "difficulty": "Easy",
-      "category": "AWS"
+      "difficulty": "Medium",
+      "category": "General"
     },
     {
-      "questionId": "q4",
-      "questionText": "Which command lists running Docker containers?",
+      "questionId": "q1788891209558",
+      "questionText": "CNNs are particularly effective for processing:",
       "options": [
-        "docker ls",
-        "docker ps",
-        "docker list",
-        "docker show"
+        "Images",
+        "Database tables",
+        "Network packets",
+        "Operating systems"
+      ],
+      "correctAnswer": 0,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891252755",
+      "questionText": "Which activation function is commonly used in neural networks?",
+      "options": [
+        "FIFO",
+        "HTTP",
+        "ReLU",
+        "SQL"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891318031",
+      "questionText": "What is the primary purpose of a loss function?",
+      "options": [
+        "Store data",
+        "Measure prediction error",
+        "Increase RAM",
+        "Encrypt data"
       ],
       "correctAnswer": 1,
       "marks": 1,
       "difficulty": "Medium",
-      "category": "Docker"
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891365336",
+      "questionText": "Which metric is used to evaluate classification models?",
+      "options": [
+        "CPU speed",
+        "File size",
+        "RAM capacity",
+        "Precision"
+      ],
+      "correctAnswer": 3,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891434499",
+      "questionText": "Which algorithm is based on Bayes' theorem?",
+      "options": [
+        "K-Means",
+        "KNN",
+        "Naive Bayes",
+        "DFS"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891491050",
+      "questionText": "What is the purpose of feature scaling",
+      "options": [
+        "Bring features to comparable scales",
+        "Delete features",
+        "Increase dataset size",
+        "Compile the program"
+      ],
+      "correctAnswer": 0,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891557345",
+      "questionText": "Which technique converts categorical values into binary columns?",
+      "options": [
+        "Gradient Descent",
+        "One-Hot Encoding",
+        "Backpropagation",
+        "PCA"
+      ],
+      "correctAnswer": 1,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891623272",
+      "questionText": "Which algorithm finds the shortest path in a weighted graph with non-negative edges?",
+      "options": [
+        "BFS",
+        "DFS",
+        "Binary Search",
+        "Dijkstra's Algorithm"
+      ],
+      "correctAnswer": 3,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891667158",
+      "questionText": "Which data structure follows LIFO?",
+      "options": [
+        "Queue",
+        "Linked List",
+        "Stack",
+        "Graph"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891725676",
+      "questionText": "What is the average time complexity of binary search?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(n²)",
+        "O(n log n)"
+      ],
+      "correctAnswer": 1,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891789452",
+      "questionText": "Which data structure is commonly used in BFS?",
+      "options": [
+        "Stack",
+        "Heap",
+        "Array",
+        "Queue"
+      ],
+      "correctAnswer": 3,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891848054",
+      "questionText": "Which normal form removes partial dependency",
+      "options": [
+        "1NF",
+        "3NF",
+        "2NF",
+        "BCNF"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891887368",
+      "questionText": "Which SQL command completely removes a table?",
+      "options": [
+        "DELETE",
+        "CLEAR",
+        "REMOVE",
+        "DROP"
+      ],
+      "correctAnswer": 3,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891952881",
+      "questionText": "Which key uniquely identifies each record in a relational table?",
+      "options": [
+        "Foreign Key",
+        "Primary Key",
+        "Secondary Key",
+        "Alternate Key"
+      ],
+      "correctAnswer": 1,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788891987601",
+      "questionText": "Which protocol is connection-oriented?",
+      "options": [
+        "UDP",
+        "IP",
+        "ICMP",
+        "TCP"
+      ],
+      "correctAnswer": 3,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788892025480",
+      "questionText": "Which component of an operating system manages processes and memory?",
+      "options": [
+        "Browser",
+        "Compiler",
+        "Kernel",
+        "Editor"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    },
+    {
+      "questionId": "q1788892081618",
+      "questionText": "Which CPU scheduling algorithm can cause starvation?",
+      "options": [
+        "FCFS",
+        "Priority Scheduling",
+        "Round Robin",
+        "FIFO"
+      ],
+      "correctAnswer": 1,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
     }
   ],
   "quizzes": [
@@ -63,10 +287,45 @@
       "title": "AWS Cloud Challenge",
       "description": "Core AWS services quiz",
       "duration": 10,
-      "status": "DRAFT",
+      "status": "COMPLETED",
       "createdAt": "2026-09-08T00:00:00.000Z"
+    },
+    {
+      "quizId": "quiz1788892136687",
+      "title": "test",
+      "description": "test",
+      "duration": 8,
+      "status": "LIVE",
+      "createdAt": "2026-09-08T18:28:56.687Z"
     }
   ],
-  "attempts": {},
-  "names": {}
+  "attempts": {
+    "quiz1": {
+      "KJ23MCA001": [
+        {
+          "score": 0,
+          "totalMarks": 4,
+          "submittedAt": "2026-09-08T18:04:02.301Z"
+        },
+        {
+          "score": 0,
+          "totalMarks": 2,
+          "submittedAt": "2026-09-08T18:05:05.107Z"
+        }
+      ]
+    },
+    "quiz1788892136687": {
+      "26MCAD30": [
+        {
+          "score": 18,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-08T18:32:39.424Z"
+        }
+      ]
+    }
+  },
+  "names": {
+    "KJ23MCA001": "KJ23MCA001",
+    "26MCAD30": "26MCAD30"
+  }
 }
