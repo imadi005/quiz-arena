@@ -1,20 +1,5 @@
 {
-  "questions": [
-    {
-      "questionId": "q3",
-      "questionText": "What does IAM stand for?",
-      "options": [
-        "Internal Access Manager",
-        "Identity and Access Management",
-        "Instance Access Module",
-        "Integrated App Manager"
-      ],
-      "correctAnswer": 1,
-      "marks": 1,
-      "difficulty": "Easy",
-      "category": "AWS"
-    }
-  ],
+  "questions": [],
   "quizzes": [
     {
       "quizId": "quiz1",
