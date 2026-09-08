@@ -31,7 +31,13 @@ export function LoginPage() {
 
     setIsSubmitting(true)
     try {
-      const status = await quizApi.getAttemptStatus(rn)
+      const quizStatus = await quizApi.getQuizStatus()
+      if (!quizStatus.live) {
+        setError('No quiz is live right now. Ask your admin to start one.')
+        return
+      }
+
+      const status = await quizApi.getAttemptStatus(rn, quizStatus.quizId)
       if (status.attemptsRemaining <= 0) {
         navigate('/result', {
           state: {
@@ -45,7 +51,10 @@ export function LoginPage() {
         })
         return
       }
+
       sessionStorage.setItem('quizRollNumber', rn)
+      sessionStorage.setItem('quizId', quizStatus.quizId)
+      sessionStorage.setItem('quizDuration', String(quizStatus.duration))
       navigate('/sample')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not start the test. Try again.')

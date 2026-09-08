@@ -9,11 +9,18 @@ const medal = ['🥇', '🥈', '🥉']
 
 export function AdminLeaderboardPage() {
   const [rows, setRows] = useState<LeaderboardRow[]>([])
+  const [liveTitle, setLiveTitle] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
     const load = () => {
+      quizApi
+        .getQuizStatus()
+        .then((status) => {
+          if (!cancelled) setLiveTitle(status.live ? status.title : null)
+        })
+        .catch(() => {})
       quizApi
         .getLeaderboard()
         .then((data) => {
@@ -36,7 +43,7 @@ export function AdminLeaderboardPage() {
 
   return (
     <AdminLayout>
-      <PageHeader title="Live Top 10" subtitle="Roll-number-only test" />
+      <PageHeader title="Live Top 10" subtitle={liveTitle ?? 'No quiz is live right now'} />
 
       <Card className="p-4 sm:p-5">
         {error && <p className="mb-3 text-sm text-state-danger">{error}</p>}

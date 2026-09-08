@@ -17,11 +17,31 @@ export interface AdminQuestion extends PublicQuestion {
 
 export interface AttemptStatus {
   rollNumber: string
+  quizId: string
   attemptsUsed: number
   maxAttempts: number
   attemptsRemaining: number
   bestScore: number | null
   totalMarks: number
+}
+
+export type QuizStatusValue = 'DRAFT' | 'SCHEDULED' | 'LIVE' | 'PAUSED' | 'COMPLETED'
+
+export type QuizStatusResponse =
+  | { live: false }
+  | { live: true; quizId: string; title: string; duration: number; questionCount: number }
+
+export interface AdminQuiz {
+  quizId: string
+  title: string
+  description: string
+  duration: number
+  status: QuizStatusValue
+  createdAt: string
+  questionCount: number
+  completed: number
+  averageScore: number
+  studentsOnline: number
 }
 
 export interface SubmitResult {
@@ -57,15 +77,17 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 export const quizApi = {
+  getQuizStatus: () => request<QuizStatusResponse>('/quiz-status'),
   getQuestions: () => request<PublicQuestion[]>('/questions'),
-  getAttemptStatus: (rollNumber: string) =>
-    request<AttemptStatus>(`/attempts/${encodeURIComponent(rollNumber)}`),
-  submit: (rollNumber: string, name: string, answers: number[]) =>
+  getAttemptStatus: (rollNumber: string, quizId: string) =>
+    request<AttemptStatus>(`/attempts/${encodeURIComponent(rollNumber)}?quizId=${encodeURIComponent(quizId)}`),
+  submit: (quizId: string, rollNumber: string, name: string, answers: number[]) =>
     request<SubmitResult>('/submit', {
       method: 'POST',
-      body: JSON.stringify({ rollNumber, name, answers }),
+      body: JSON.stringify({ quizId, rollNumber, name, answers }),
     }),
-  getLeaderboard: () => request<LeaderboardRow[]>('/leaderboard'),
+  getLeaderboard: (quizId?: string) =>
+    request<LeaderboardRow[]>(`/leaderboard${quizId ? `?quizId=${encodeURIComponent(quizId)}` : ''}`),
 
   getAdminQuestions: () => request<AdminQuestion[]>('/admin/questions'),
   addAdminQuestion: (question: Omit<AdminQuestion, 'questionId'>) =>
@@ -75,4 +97,13 @@ export const quizApi = {
     }),
   deleteAdminQuestion: (questionId: string) =>
     request<void>(`/admin/questions/${encodeURIComponent(questionId)}`, { method: 'DELETE' }),
+
+  getAdminQuizzes: () => request<AdminQuiz[]>('/admin/quizzes'),
+  createAdminQuiz: (quiz: { title: string; description: string; duration: number }) =>
+    request<AdminQuiz>('/admin/quizzes', { method: 'POST', body: JSON.stringify(quiz) }),
+  patchAdminQuiz: (quizId: string, action: 'start' | 'pause' | 'end') =>
+    request<AdminQuiz>(`/admin/quizzes/${encodeURIComponent(quizId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ action }),
+    }),
 }

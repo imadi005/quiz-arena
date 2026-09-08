@@ -1,12 +1,17 @@
 import { getData } from './_lib/github.js'
+import { getLiveQuiz } from './_lib/quiz.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ message: 'Method not allowed' })
   try {
     const { data } = await getData()
-    const names = data.names || {}
+    const quizId = req.query.quizId || (getLiveQuiz(data) || {}).quizId
+    if (!quizId) return res.status(200).json([])
 
-    const rows = Object.entries(data.attempts)
+    const names = data.names || {}
+    const attemptsForQuiz = (data.attempts || {})[quizId] || {}
+
+    const rows = Object.entries(attemptsForQuiz)
       .filter(([, attempts]) => attempts.length > 0)
       .map(([rollNumber, attempts]) => {
         const best = attempts.reduce((max, a) => (a.score > max.score ? a : max), attempts[0])

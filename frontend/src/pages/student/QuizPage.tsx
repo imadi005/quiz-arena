@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { quizApi, type PublicQuestion } from '@/services/quizApi'
 
-const DURATION_SECONDS = 10 * 60
+const DEFAULT_DURATION_SECONDS = 10 * 60
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60)
@@ -15,11 +15,14 @@ function formatTime(seconds: number) {
 export function QuizPage() {
   const navigate = useNavigate()
   const rollNumber = sessionStorage.getItem('quizRollNumber')
+  const quizId = sessionStorage.getItem('quizId')
+  const durationMinutes = Number(sessionStorage.getItem('quizDuration'))
+  const durationSeconds = durationMinutes > 0 ? durationMinutes * 60 : DEFAULT_DURATION_SECONDS
 
   const [questions, setQuestions] = useState<PublicQuestion[] | null>(null)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [current, setCurrent] = useState(0)
-  const [secondsLeft, setSecondsLeft] = useState(DURATION_SECONDS)
+  const [secondsLeft, setSecondsLeft] = useState(durationSeconds)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -32,7 +35,7 @@ export function QuizPage() {
   submittingRef.current = submitting
 
   useEffect(() => {
-    if (!rollNumber) {
+    if (!rollNumber || !quizId) {
       navigate('/login', { replace: true })
       return
     }
@@ -66,13 +69,15 @@ export function QuizPage() {
 
   const handleSubmit = async () => {
     const qs = questionsRef.current
-    if (!rollNumber || !qs || submittingRef.current) return
+    if (!rollNumber || !quizId || !qs || submittingRef.current) return
     setSubmitting(true)
     setError(null)
     try {
       const orderedAnswers = qs.map((_, i) => answersRef.current[i] ?? -1)
-      const result = await quizApi.submit(rollNumber, rollNumber, orderedAnswers)
+      const result = await quizApi.submit(quizId, rollNumber, rollNumber, orderedAnswers)
       sessionStorage.removeItem('quizRollNumber')
+      sessionStorage.removeItem('quizId')
+      sessionStorage.removeItem('quizDuration')
       navigate('/result', { state: { rollNumber, ...result } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not submit. Try again.')

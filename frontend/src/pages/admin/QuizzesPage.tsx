@@ -1,36 +1,95 @@
+import { useEffect, useState, type FormEvent } from 'react'
 import { Plus, Play, Pause, Square, Users, Clock } from 'lucide-react'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { mockQuizzes } from '@/data/mockAdmin'
-import type { QuizStatus } from '@/types'
+import { Input } from '@/components/ui/Input'
+import { Modal } from '@/components/ui/Modal'
+import { quizApi, type AdminQuiz, type QuizStatusValue } from '@/services/quizApi'
 
-const statusTone: Record<QuizStatus, 'answered' | 'info' | 'warning' | 'neutral' | 'danger'> = {
+const statusTone: Record<QuizStatusValue, 'answered' | 'info' | 'warning' | 'neutral' | 'danger'> = {
   LIVE: 'answered',
   SCHEDULED: 'info',
   DRAFT: 'neutral',
   PAUSED: 'warning',
   COMPLETED: 'neutral',
-  ARCHIVED: 'neutral',
 }
 
+const emptyForm = { title: '', description: '', duration: 10 }
+
 export function AdminQuizzesPage() {
+  const [quizzes, setQuizzes] = useState<AdminQuiz[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [showModal, setShowModal] = useState(false)
+  const [form, setForm] = useState(emptyForm)
+  const [saving, setSaving] = useState(false)
+  const [busyQuizId, setBusyQuizId] = useState<string | null>(null)
+
+  const load = () => {
+    quizApi
+      .getAdminQuizzes()
+      .then((qs) => {
+        setQuizzes(qs)
+        setError(null)
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : 'Could not load quizzes.'))
+  }
+
+  useEffect(() => {
+    load()
+    const interval = setInterval(load, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleCreate = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!form.title.trim()) {
+      setError('Give the quiz a title.')
+      return
+    }
+    setSaving(true)
+    try {
+      await quizApi.createAdminQuiz(form)
+      setForm(emptyForm)
+      setShowModal(false)
+      load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not create quiz.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleAction = async (quizId: string, action: 'start' | 'pause' | 'end') => {
+    setBusyQuizId(quizId)
+    try {
+      await quizApi.patchAdminQuiz(quizId, action)
+      load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not update quiz.')
+    } finally {
+      setBusyQuizId(null)
+    }
+  }
+
   return (
     <AdminLayout>
       <PageHeader
         title="Quizzes"
-        subtitle={`${mockQuizzes.length} quizzes`}
+        subtitle={`${quizzes.length} quiz${quizzes.length === 1 ? '' : 'zes'}`}
         action={
-          <Button>
+          <Button onClick={() => setShowModal(true)}>
             <Plus size={16} /> Create Quiz
           </Button>
         }
       />
 
+      {error && <p className="mb-4 text-sm text-state-danger">{error}</p>}
+
       <div className="grid gap-4 sm:grid-cols-2">
-        {mockQuizzes.map((q) => (
+        {quizzes.map((q) => (
           <Card key={q.quizId} className="p-5">
             <div className="mb-3 flex items-start justify-between gap-2">
               <div>
@@ -40,7 +99,7 @@ export function AdminQuizzesPage() {
               </div>
             </div>
 
-            <div className="mb-4 grid grid-cols-3 gap-3 text-xs">
+            <div className="mb-4 grid grid-cols-2 gap-3 text-xs">
               <div>
                 <p className="text-ink-faint">Questions</p>
                 <p className="mt-0.5 font-mono-num font-semibold text-ink">{q.questionCount}</p>
@@ -49,16 +108,12 @@ export function AdminQuizzesPage() {
                 <p className="text-ink-faint">Duration</p>
                 <p className="mt-0.5 font-mono-num font-semibold text-ink">{q.duration}m</p>
               </div>
-              <div>
-                <p className="text-ink-faint">Malpractice Limit</p>
-                <p className="mt-0.5 font-mono-num font-semibold text-ink">{q.malpracticeLimit}</p>
-              </div>
             </div>
 
-            {q.status === 'LIVE' && (
+            {(q.status === 'LIVE' || q.status === 'PAUSED' || q.status === 'COMPLETED') && (
               <div className="mb-4 flex items-center gap-4 rounded-lg bg-surface-raised px-3 py-2 text-xs text-ink-muted">
                 <span className="flex items-center gap-1.5">
-                  <Users size={13} /> {q.studentsOnline} online
+                  <Users size={13} /> {q.studentsOnline} completed
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock size={13} /> avg {q.averageScore}%
@@ -67,28 +122,73 @@ export function AdminQuizzesPage() {
             )}
 
             <div className="flex gap-2">
-              {q.status === 'DRAFT' || q.status === 'SCHEDULED' ? (
-                <Button variant="secondary" fullWidth>
+              {q.status === 'DRAFT' || q.status === 'SCHEDULED' || q.status === 'PAUSED' ? (
+                <Button
+                  variant="secondary"
+                  fullWidth
+                  disabled={busyQuizId === q.quizId}
+                  onClick={() => handleAction(q.quizId, 'start')}
+                >
                   <Play size={14} /> Start
                 </Button>
               ) : q.status === 'LIVE' ? (
                 <>
-                  <Button variant="secondary" fullWidth>
+                  <Button
+                    variant="secondary"
+                    fullWidth
+                    disabled={busyQuizId === q.quizId}
+                    onClick={() => handleAction(q.quizId, 'pause')}
+                  >
                     <Pause size={14} /> Pause
                   </Button>
-                  <Button variant="danger" fullWidth>
+                  <Button
+                    variant="danger"
+                    fullWidth
+                    disabled={busyQuizId === q.quizId}
+                    onClick={() => handleAction(q.quizId, 'end')}
+                  >
                     <Square size={14} /> End
                   </Button>
                 </>
               ) : (
-                <Button variant="ghost" fullWidth>
-                  View Report
+                <Button variant="ghost" fullWidth disabled>
+                  Completed
                 </Button>
               )}
             </div>
           </Card>
         ))}
+        {quizzes.length === 0 && !error && (
+          <p className="p-4 text-sm text-ink-faint">No quizzes yet — create one to get started.</p>
+        )}
       </div>
+
+      {showModal && (
+        <Modal title="Create Quiz" onClose={() => setShowModal(false)}>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <Input
+              label="Title"
+              value={form.title}
+              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+            />
+            <Input
+              label="Description"
+              value={form.description}
+              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+            />
+            <Input
+              label="Duration (minutes)"
+              type="number"
+              min={1}
+              value={form.duration}
+              onChange={(e) => setForm((f) => ({ ...f, duration: Number(e.target.value) }))}
+            />
+            <Button type="submit" fullWidth disabled={saving}>
+              {saving ? 'Creating…' : 'Create Quiz'}
+            </Button>
+          </form>
+        </Modal>
+      )}
     </AdminLayout>
   )
 }
