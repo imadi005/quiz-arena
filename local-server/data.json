@@ -237,6 +237,20 @@
       "marks": 1,
       "difficulty": "Medium",
       "category": "General"
+    },
+    {
+      "questionId": "q1788891987601",
+      "questionText": "Which protocol is connection-oriented?",
+      "options": [
+        "UDP",
+        "IP",
+        "ICMP",
+        "TCP"
+      ],
+      "correctAnswer": 3,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
     }
   ],
   "quizzes": [
