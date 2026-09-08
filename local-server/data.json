@@ -1,20 +1,6 @@
 {
   "questions": [
     {
-      "questionId": "q2",
-      "questionText": "Which service is a fully managed NoSQL database?",
-      "options": [
-        "Amazon RDS",
-        "Amazon Redshift",
-        "Amazon DynamoDB",
-        "Amazon Aurora"
-      ],
-      "correctAnswer": 2,
-      "marks": 1,
-      "difficulty": "Medium",
-      "category": "Database"
-    },
-    {
       "questionId": "q3",
       "questionText": "What does IAM stand for?",
       "options": [
