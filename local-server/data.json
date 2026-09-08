@@ -320,6 +320,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-08T18:57:41.850Z"
         }
+      ],
+      "26MCAC67": [
+        {
+          "score": 9,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-08T18:57:45.126Z"
+        }
       ]
     }
   },
@@ -328,6 +335,7 @@
     "26MCAD30": "26MCAD30",
     "26MCAA17": "Dev",
     "26BBAF02": "Agrim Gupta",
-    "25BAIB53": "Parmit singh"
+    "25BAIB53": "Parmit singh",
+    "26MCAC67": "Priyanshu"
   }
 }
