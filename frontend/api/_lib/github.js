@@ -14,7 +14,7 @@ async function ghFetch(url, options = {}) {
   const res = await fetch(url, {
     ...options,
     headers: {
-      Authorization: `Bearer ${TOKEN}`,
+      ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json',
       ...(options.headers || {}),
@@ -41,6 +41,11 @@ export async function getData() {
 // (another request committed in between), so concurrent submissions don't
 // silently clobber each other.
 export async function saveData(mutate) {
+  if (!TOKEN) {
+    throw Object.assign(new Error('Server is not configured to save data yet (GITHUB_TOKEN missing).'), {
+      status: 503,
+    })
+  }
   let lastErr
   for (let attempt = 0; attempt < 3; attempt++) {
     const { data, sha } = await getData()
