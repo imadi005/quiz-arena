@@ -18,9 +18,9 @@ export default async function handler(req, res) {
     await saveData((data) => {
       const quiz = (data.quizzes || []).find((q) => q.quizId === quizId)
       if (!quiz) throw Object.assign(new Error('Quiz not found.'), { status: 404 })
-      if (quiz.status !== 'LIVE') {
-        throw Object.assign(new Error('This quiz is not live anymore.'), { status: 409 })
-      }
+      // Deliberately no LIVE-only check here: a student already mid-test (started while
+      // it was live) must still be able to submit even if the admin pauses/ends it
+      // in the meantime — the frontend auto-submits on that transition (see QuizPage).
       if (data.questions.length === 0) {
         throw Object.assign(new Error('No questions have been added yet. Ask your admin to add questions.'), {
           status: 409,

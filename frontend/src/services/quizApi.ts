@@ -106,4 +106,6 @@ export const quizApi = {
       method: 'PATCH',
       body: JSON.stringify({ action }),
     }),
+  deleteAdminQuiz: (quizId: string) =>
+    request<void>(`/admin/quizzes/${encodeURIComponent(quizId)}`, { method: 'DELETE' }),
 }

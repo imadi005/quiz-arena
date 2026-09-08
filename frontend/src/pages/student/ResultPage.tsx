@@ -9,6 +9,7 @@ interface ResultState {
   attemptsUsed: number
   attemptsRemaining: number
   locked?: boolean
+  autoEnded?: boolean
 }
 
 export function ResultPage() {
@@ -20,7 +21,7 @@ export function ResultPage() {
     return null
   }
 
-  const { rollNumber, score, totalMarks, attemptsUsed, attemptsRemaining, locked } = state
+  const { rollNumber, score, totalMarks, attemptsUsed, attemptsRemaining, locked, autoEnded } = state
   const accuracy = totalMarks && score !== null ? Math.round((score / totalMarks) * 1000) / 10 : null
 
   return (
@@ -30,6 +31,11 @@ export function ResultPage() {
           {locked ? 'No attempts remaining' : 'Test submitted'}
         </h1>
         <p className="mt-1.5 font-mono-num text-sm text-ink-faint">{rollNumber}</p>
+        {autoEnded && (
+          <p className="mt-3 rounded-lg bg-signal-blue/10 px-3 py-2 text-xs text-signal-blue">
+            The admin ended this quiz — your answers were submitted automatically.
+          </p>
+        )}
 
         <div className="mt-8">
           <p className="font-mono-num text-4xl font-bold text-ink">

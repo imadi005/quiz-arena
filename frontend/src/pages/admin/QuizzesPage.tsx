@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Plus, Play, Pause, Square, Users, Clock } from 'lucide-react'
+import { Plus, Play, Pause, Square, Users, Clock, Trash2 } from 'lucide-react'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Card } from '@/components/ui/Card'
@@ -74,6 +74,19 @@ export function AdminQuizzesPage() {
     }
   }
 
+  const handleDelete = async (quizId: string, title: string) => {
+    if (!window.confirm(`Delete "${title}"? This also deletes its attempts and leaderboard data.`)) return
+    setBusyQuizId(quizId)
+    try {
+      await quizApi.deleteAdminQuiz(quizId)
+      load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not delete quiz.')
+    } finally {
+      setBusyQuizId(null)
+    }
+  }
+
   return (
     <AdminLayout>
       <PageHeader
@@ -97,6 +110,14 @@ export function AdminQuizzesPage() {
                 <h3 className="mt-2 font-display text-base font-bold text-ink">{q.title}</h3>
                 <p className="mt-1 text-sm text-ink-muted">{q.description}</p>
               </div>
+              <button
+                onClick={() => handleDelete(q.quizId, q.title)}
+                disabled={busyQuizId === q.quizId}
+                className="shrink-0 rounded-lg p-2 text-ink-faint hover:bg-state-danger/10 hover:text-state-danger"
+                aria-label="Delete quiz"
+              >
+                <Trash2 size={15} />
+              </button>
             </div>
 
             <div className="mb-4 grid grid-cols-2 gap-3 text-xs">

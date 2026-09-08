@@ -99,7 +99,9 @@ app.post('/api/submit', (req, res) => {
 
   const quiz = data.quizzes.find((q) => q.quizId === quizId)
   if (!quiz) return res.status(404).json({ message: 'Quiz not found.' })
-  if (quiz.status !== 'LIVE') return res.status(409).json({ message: 'This quiz is not live anymore.' })
+  // Deliberately no LIVE-only check here: a student already mid-test (started while
+  // it was live) must still be able to submit even if the admin pauses/ends it
+  // in the meantime — the frontend auto-submits on that transition (see QuizPage).
   if (data.questions.length === 0) {
     return res.status(409).json({ message: 'No questions have been added yet. Ask your admin to add questions.' })
   }
@@ -261,6 +263,18 @@ app.patch('/api/admin/quizzes/:quizId', (req, res) => {
 
   saveData(data)
   res.json(quiz)
+})
+
+app.delete('/api/admin/quizzes/:quizId', (req, res) => {
+  const data = loadData()
+  const before = data.quizzes.length
+  data.quizzes = data.quizzes.filter((q) => q.quizId !== req.params.quizId)
+  if (data.quizzes.length === before) {
+    return res.status(404).json({ message: 'Quiz not found.' })
+  }
+  delete data.attempts[req.params.quizId]
+  saveData(data)
+  res.status(204).end()
 })
 
 // --- Serve the built frontend (classroom/production mode) -----------------

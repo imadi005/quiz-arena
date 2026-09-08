@@ -57,7 +57,7 @@ export function QuizPage() {
       setSecondsLeft((s) => {
         if (s <= 1) {
           clearInterval(timer)
-          if (!submittingRef.current) void handleSubmit()
+          if (!submittingRef.current) void handleSubmit(false)
           return 0
         }
         return s - 1
@@ -67,7 +67,24 @@ export function QuizPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleSubmit = async () => {
+  // If the admin pauses or ends this quiz while a student is mid-test, don't leave
+  // them stuck on a blocking error — submit whatever they have automatically.
+  useEffect(() => {
+    if (!quizId) return
+    const poll = setInterval(() => {
+      quizApi
+        .getQuizStatus()
+        .then((status) => {
+          const stillLive = status.live && status.quizId === quizId
+          if (!stillLive && !submittingRef.current) void handleSubmit(true)
+        })
+        .catch(() => {})
+    }, 5000)
+    return () => clearInterval(poll)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleSubmit = async (autoEnded: boolean) => {
     const qs = questionsRef.current
     if (!rollNumber || !quizId || !qs || submittingRef.current) return
     setSubmitting(true)
@@ -78,7 +95,7 @@ export function QuizPage() {
       sessionStorage.removeItem('quizRollNumber')
       sessionStorage.removeItem('quizId')
       sessionStorage.removeItem('quizDuration')
-      navigate('/result', { state: { rollNumber, ...result } })
+      navigate('/result', { state: { rollNumber, autoEnded, ...result } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not submit. Try again.')
       setSubmitting(false)
@@ -168,7 +185,7 @@ export function QuizPage() {
             Next
           </Button>
         ) : (
-          <Button onClick={() => void handleSubmit()} disabled={submitting}>
+          <Button onClick={() => void handleSubmit(false)} disabled={submitting}>
             {submitting ? 'Submitting…' : 'Submit Test'}
           </Button>
         )}
