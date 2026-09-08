@@ -1,5 +1,20 @@
 {
-  "questions": [],
+  "questions": [
+    {
+      "questionId": "q1788891046015",
+      "questionText": "Which algorithm is commonly used for binary classification?",
+      "options": [
+        "K-Means",
+        "Logistic Regression",
+        "Apriori",
+        "PCA"
+      ],
+      "correctAnswer": 1,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
+    }
+  ],
   "quizzes": [
     {
       "quizId": "quiz1",
