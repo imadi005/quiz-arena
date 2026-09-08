@@ -299,11 +299,19 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-08T18:32:39.424Z"
         }
+      ],
+      "26MCAA17": [
+        {
+          "score": 19,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-08T18:46:39.273Z"
+        }
       ]
     }
   },
   "names": {
     "KJ23MCA001": "KJ23MCA001",
-    "26MCAD30": "26MCAD30"
+    "26MCAD30": "26MCAD30",
+    "26MCAA17": "Dev"
   }
 }
