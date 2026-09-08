@@ -313,9 +313,19 @@
           "submittedAt": "2026-09-08T18:05:05.107Z"
         }
       ]
+    },
+    "quiz1788892136687": {
+      "26MCAD30": [
+        {
+          "score": 18,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-08T18:32:39.424Z"
+        }
+      ]
     }
   },
   "names": {
-    "KJ23MCA001": "KJ23MCA001"
+    "KJ23MCA001": "KJ23MCA001",
+    "26MCAD30": "26MCAD30"
   }
 }
