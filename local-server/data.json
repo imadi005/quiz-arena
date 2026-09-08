@@ -97,6 +97,20 @@
       "marks": 1,
       "difficulty": "Medium",
       "category": "General"
+    },
+    {
+      "questionId": "q1788891434499",
+      "questionText": "Which algorithm is based on Bayes' theorem?",
+      "options": [
+        "K-Means",
+        "KNN",
+        "Naive Bayes",
+        "DFS"
+      ],
+      "correctAnswer": 2,
+      "marks": 1,
+      "difficulty": "Medium",
+      "category": "General"
     }
   ],
   "quizzes": [
