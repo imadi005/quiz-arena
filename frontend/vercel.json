@@ -1,4 +1,30 @@
 {
+  "headers": [
+    {
+      "source": "/api/questions",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+    },
+    {
+      "source": "/api/quiz-status",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+    },
+    {
+      "source": "/api/leaderboard",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+    },
+    {
+      "source": "/api/attempts/:rollNumber",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+    },
+    {
+      "source": "/api/admin/questions",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+    },
+    {
+      "source": "/api/admin/quizzes",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+    }
+  ],
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
