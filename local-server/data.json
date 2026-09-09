@@ -339,6 +339,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:22:45.069Z"
         }
+      ],
+      "25MCAA45": [
+        {
+          "score": 14,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:23:05.871Z"
+        }
       ]
     }
   },
@@ -356,6 +363,7 @@
     "26MCAD60": "Pruthvi",
     "25MCAD05": "Nawrin",
     "25MCAA60": "Shuuushank",
-    "25MCAA61": "Nayan"
+    "25MCAA61": "Nayan",
+    "25MCAA45": "Shiva"
   }
 }
