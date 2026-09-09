@@ -281,7 +281,16 @@
       "category": "General"
     }
   ],
-  "quizzes": [],
+  "quizzes": [
+    {
+      "quizId": "quiz1788948866237",
+      "title": "AIML test",
+      "description": "",
+      "duration": 25,
+      "status": "DRAFT",
+      "createdAt": "2026-09-09T10:14:26.237Z"
+    }
+  ],
   "attempts": {},
   "names": {
     "1234": "ok",
