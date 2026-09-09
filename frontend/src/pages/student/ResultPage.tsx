@@ -63,6 +63,8 @@ export function ResultPage() {
             sessionStorage.removeItem('quizEndAt')
             sessionStorage.removeItem('quizAnswers')
             sessionStorage.removeItem('quizCurrent')
+            sessionStorage.removeItem('quizOrder')
+            sessionStorage.removeItem('quizOptionOrder')
             navigate('/login')
           }}
         >

@@ -12,6 +12,24 @@ function formatTime(seconds: number) {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
+function shuffledIndices(length: number): number[] {
+  const arr = Array.from({ length }, (_, i) => i)
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
+function isValidPermutation(value: unknown, length: number): value is number[] {
+  return (
+    Array.isArray(value) &&
+    value.length === length &&
+    new Set(value).size === length &&
+    value.every((n) => Number.isInteger(n) && n >= 0 && n < length)
+  )
+}
+
 export function QuizPage() {
   const navigate = useNavigate()
   const rollNumber = sessionStorage.getItem('quizRollNumber')
@@ -32,6 +50,11 @@ export function QuizPage() {
   })()
 
   const [questions, setQuestions] = useState<PublicQuestion[] | null>(null)
+  // order[displayPosition] = original question index. optionOrder[originalQuestionIndex]
+  // = original option indices in the order they're displayed. Both are shuffled per
+  // student and persisted so a refresh doesn't reshuffle mid-test.
+  const [order, setOrder] = useState<number[] | null>(null)
+  const [optionOrder, setOptionOrder] = useState<Record<number, number[]> | null>(null)
   const [answers, setAnswers] = useState<Record<number, number>>(() => {
     try {
       return JSON.parse(sessionStorage.getItem('quizAnswers') ?? '{}')
@@ -73,6 +96,30 @@ export function QuizPage() {
           return
         }
         setQuestions(qs)
+
+        let questionOrder: number[]
+        try {
+          const stored = JSON.parse(sessionStorage.getItem('quizOrder') ?? 'null')
+          questionOrder = isValidPermutation(stored, qs.length) ? stored : shuffledIndices(qs.length)
+        } catch {
+          questionOrder = shuffledIndices(qs.length)
+        }
+        sessionStorage.setItem('quizOrder', JSON.stringify(questionOrder))
+        setOrder(questionOrder)
+
+        let perQuestionOptionOrder: Record<number, number[]>
+        try {
+          const stored = JSON.parse(sessionStorage.getItem('quizOptionOrder') ?? 'null')
+          const valid =
+            stored &&
+            typeof stored === 'object' &&
+            qs.every((q, i) => isValidPermutation(stored[i], q.options.length))
+          perQuestionOptionOrder = valid ? stored : Object.fromEntries(qs.map((q, i) => [i, shuffledIndices(q.options.length)]))
+        } catch {
+          perQuestionOptionOrder = Object.fromEntries(qs.map((q, i) => [i, shuffledIndices(q.options.length)]))
+        }
+        sessionStorage.setItem('quizOptionOrder', JSON.stringify(perQuestionOptionOrder))
+        setOptionOrder(perQuestionOptionOrder)
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Could not load questions.'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,6 +170,8 @@ export function QuizPage() {
       sessionStorage.removeItem('quizEndAt')
       sessionStorage.removeItem('quizAnswers')
       sessionStorage.removeItem('quizCurrent')
+      sessionStorage.removeItem('quizOrder')
+      sessionStorage.removeItem('quizOptionOrder')
       navigate('/result', { state: { rollNumber, name, autoEnded, ...result } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not submit. Try again.')
@@ -143,7 +192,7 @@ export function QuizPage() {
     )
   }
 
-  if (!questions) {
+  if (!questions || !order || !optionOrder) {
     return (
       <div className="mx-auto max-w-xl px-6 py-16 text-center text-sm text-ink-muted">
         Loading questions…
@@ -151,7 +200,9 @@ export function QuizPage() {
     )
   }
 
-  const q = questions[current]
+  const origIdx = order[current]
+  const q = questions[origIdx]
+  const displayOptionOrder = optionOrder[origIdx]
   const answeredCount = Object.keys(answers).length
 
   return (
@@ -173,19 +224,19 @@ export function QuizPage() {
       <Card className="p-6">
         <p className="mb-5 font-medium text-ink">{q.questionText}</p>
         <div className="space-y-2.5">
-          {q.options.map((opt, i) => (
+          {displayOptionOrder.map((actualOptionIndex, displayPos) => (
             <button
-              key={i}
+              key={actualOptionIndex}
               type="button"
-              onClick={() => setAnswers((a) => ({ ...a, [current]: i }))}
+              onClick={() => setAnswers((a) => ({ ...a, [origIdx]: actualOptionIndex }))}
               className={[
                 'w-full rounded-lg border px-4 py-3 text-left text-sm transition-colors',
-                answers[current] === i
+                answers[origIdx] === actualOptionIndex
                   ? 'border-signal-blue bg-signal-blue/10 text-ink'
                   : 'border-border-subtle text-ink-muted hover:border-signal-blue/40',
               ].join(' ')}
             >
-              {String.fromCharCode(65 + i)}. {opt}
+              {String.fromCharCode(65 + displayPos)}. {q.options[actualOptionIndex]}
             </button>
           ))}
         </div>
