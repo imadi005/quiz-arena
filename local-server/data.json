@@ -638,6 +638,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T11:00:51.229Z"
         }
+      ],
+      "25MCAC34": [
+        {
+          "score": 13,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T11:01:08.893Z"
+        }
       ]
     }
   },
@@ -696,6 +703,7 @@
     "KJ26MCAC40": "Prajita",
     "26MCAA62": "Ebenezer",
     "26MCAB49": "dhanush",
-    "26MCAD31": "Preetham"
+    "26MCAD31": "Preetham",
+    "25MCAC34": "NavaneethRagesh"
   }
 }
