@@ -320,6 +320,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:22:19.996Z"
         }
+      ],
+      "25MCAA60": [
+        {
+          "score": 19,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:22:30.405Z"
+        }
       ]
     }
   },
@@ -335,6 +342,7 @@
     "26MCAA44": "Samuel Sk",
     "25MCAA08": "Ankita",
     "26MCAD60": "Pruthvi",
-    "25MCAD05": "Nawrin"
+    "25MCAD05": "Nawrin",
+    "25MCAA60": "Shuuushank"
   }
 }
