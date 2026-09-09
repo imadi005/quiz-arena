@@ -617,6 +617,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:49:39.913Z"
         }
+      ],
+      "26MCAA62": [
+        {
+          "score": 13,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:52:22.518Z"
+        }
       ]
     }
   },
@@ -672,6 +679,7 @@
     "26MCAD40": "Soumi Saha",
     "26MCAB27": "Jyotirmoy",
     "26MCAB32": "Sahid",
-    "KJ26MCAC40": "Prajita"
+    "KJ26MCAC40": "Prajita",
+    "26MCAA62": "Ebenezer"
   }
 }
