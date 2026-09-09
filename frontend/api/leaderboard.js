@@ -22,6 +22,7 @@ export default async function handler(req, res) {
           totalMarks: best.totalMarks,
           accuracy: best.totalMarks ? Math.round((best.score / best.totalMarks) * 1000) / 10 : 0,
           submittedAt: best.submittedAt,
+          violations: best.violations || 0,
         }
       })
 

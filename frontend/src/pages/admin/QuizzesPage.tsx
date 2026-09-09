@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Plus, Play, Pause, Square, Users, Clock, Trash2 } from 'lucide-react'
+import { Plus, Play, Pause, Square, Users, Clock, Trash2, TimerReset } from 'lucide-react'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Card } from '@/components/ui/Card'
@@ -74,6 +74,18 @@ export function AdminQuizzesPage() {
     }
   }
 
+  const handleExtend = async (quizId: string, currentDuration: number, minutes: number) => {
+    setBusyQuizId(quizId)
+    try {
+      await quizApi.updateAdminQuizDuration(quizId, Math.max(1, currentDuration + minutes))
+      load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not update duration.')
+    } finally {
+      setBusyQuizId(null)
+    }
+  }
+
   const handleDelete = async (quizId: string, title: string) => {
     if (!window.confirm(`Delete "${title}"? This also deletes its attempts and leaderboard data.`)) return
     setBusyQuizId(quizId)
@@ -127,9 +139,37 @@ export function AdminQuizzesPage() {
               </div>
               <div>
                 <p className="text-ink-faint">Duration</p>
-                <p className="mt-0.5 font-mono-num font-semibold text-ink">{q.duration}m</p>
+                <div className="mt-0.5 flex items-center gap-2">
+                  <p className="font-mono-num font-semibold text-ink">{q.duration}m</p>
+                  {q.status !== 'COMPLETED' && (
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleExtend(q.quizId, q.duration, -5)}
+                        disabled={busyQuizId === q.quizId || q.duration <= 5}
+                        aria-label="Decrease duration by 5 minutes"
+                        className="rounded px-1.5 py-0.5 text-xs font-semibold text-ink-faint hover:bg-surface-raised hover:text-ink disabled:opacity-30"
+                      >
+                        −5
+                      </button>
+                      <button
+                        onClick={() => handleExtend(q.quizId, q.duration, 5)}
+                        disabled={busyQuizId === q.quizId}
+                        aria-label="Increase duration by 5 minutes"
+                        className="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-semibold text-signal-blue hover:bg-signal-blue/10"
+                      >
+                        <TimerReset size={11} /> +5
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+
+            {q.status === 'LIVE' && (
+              <p className="mb-3 text-[11px] text-ink-faint">
+                +5/−5 changes reach students already taking this quiz within 5 seconds.
+              </p>
+            )}
 
             {(q.status === 'LIVE' || q.status === 'PAUSED' || q.status === 'COMPLETED') && (
               <div className="mb-4 flex items-center gap-4 rounded-lg bg-surface-raised px-3 py-2 text-xs text-ink-muted">

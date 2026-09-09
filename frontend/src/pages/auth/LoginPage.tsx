@@ -55,11 +55,12 @@ export function LoginPage() {
         return
       }
 
-      sessionStorage.removeItem('quizEndAt')
+      sessionStorage.removeItem('quizStartAt')
       sessionStorage.removeItem('quizAnswers')
       sessionStorage.removeItem('quizCurrent')
       sessionStorage.removeItem('quizOrder')
       sessionStorage.removeItem('quizOptionOrder')
+      sessionStorage.removeItem('quizViolations')
       sessionStorage.setItem('quizRollNumber', rn)
       sessionStorage.setItem('quizName', name)
       sessionStorage.setItem('quizId', quizStatus.quizId)

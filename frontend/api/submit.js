@@ -8,6 +8,7 @@ export default async function handler(req, res) {
   const { quizId, rollNumber: rawRoll, name: rawName, answers } = req.body || {}
   const rollNumber = String(rawRoll || '').trim().toUpperCase()
   const name = String(rawName || '').trim()
+  const violations = Math.max(0, Number(req.body?.violations) || 0)
 
   if (!quizId) return res.status(400).json({ message: 'quizId is required.' })
   if (!rollNumber) return res.status(400).json({ message: 'Roll number is required.' })
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
         if (answers[i] === q.correctAnswer) score += q.marks
       })
 
-      const attempt = { score, totalMarks: totalMarksOf(data), submittedAt: new Date().toISOString() }
+      const attempt = { score, totalMarks: totalMarksOf(data), submittedAt: new Date().toISOString(), violations }
       data.attempts[quizId][rollNumber] = [...existing, attempt]
       if (name) {
         data.names = data.names || {}

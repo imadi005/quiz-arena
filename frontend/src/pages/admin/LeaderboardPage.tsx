@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Trophy } from 'lucide-react'
+import { Trophy, AlertTriangle } from 'lucide-react'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Card } from '@/components/ui/Card'
@@ -64,7 +64,17 @@ export function AdminLeaderboardPage() {
                     {entry.rank <= 3 ? medal[entry.rank - 1] : entry.rank}
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-ink">{entry.name}</p>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-sm font-medium text-ink">{entry.name}</p>
+                      {entry.violations > 0 && (
+                        <span
+                          className="flex items-center gap-1 rounded-full bg-state-danger/10 px-2 py-0.5 text-[10px] font-semibold text-state-danger"
+                          title={`Left the quiz tab ${entry.violations} time${entry.violations !== 1 ? 's' : ''} during the test`}
+                        >
+                          <AlertTriangle size={10} /> {entry.violations}
+                        </span>
+                      )}
+                    </div>
                     <p className="font-mono-num text-xs text-ink-faint">{entry.rollNumber}</p>
                   </div>
                 </div>
@@ -82,6 +92,9 @@ export function AdminLeaderboardPage() {
 
       <p className="mt-4 flex items-center gap-1.5 text-xs text-ink-faint">
         <Trophy size={13} /> Ranking: best score → earliest submission. Refreshes every 5s.
+      </p>
+      <p className="mt-1 flex items-center gap-1.5 text-xs text-ink-faint">
+        <AlertTriangle size={13} /> The red badge counts how many times a student left the quiz tab during their test.
       </p>
     </AdminLayout>
   )

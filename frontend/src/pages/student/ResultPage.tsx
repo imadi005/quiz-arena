@@ -60,11 +60,12 @@ export function ResultPage() {
             sessionStorage.removeItem('quizName')
             sessionStorage.removeItem('quizId')
             sessionStorage.removeItem('quizDuration')
-            sessionStorage.removeItem('quizEndAt')
+            sessionStorage.removeItem('quizStartAt')
             sessionStorage.removeItem('quizAnswers')
             sessionStorage.removeItem('quizCurrent')
             sessionStorage.removeItem('quizOrder')
             sessionStorage.removeItem('quizOptionOrder')
+            sessionStorage.removeItem('quizViolations')
             navigate('/login')
           }}
         >

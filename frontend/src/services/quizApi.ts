@@ -59,6 +59,7 @@ export interface LeaderboardRow {
   totalMarks: number
   accuracy: number
   submittedAt: string
+  violations: number
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -81,10 +82,10 @@ export const quizApi = {
   getQuestions: () => request<PublicQuestion[]>('/questions'),
   getAttemptStatus: (rollNumber: string, quizId: string) =>
     request<AttemptStatus>(`/attempts/${encodeURIComponent(rollNumber)}?quizId=${encodeURIComponent(quizId)}`),
-  submit: (quizId: string, rollNumber: string, name: string, answers: number[]) =>
+  submit: (quizId: string, rollNumber: string, name: string, answers: number[], violations = 0) =>
     request<SubmitResult>('/submit', {
       method: 'POST',
-      body: JSON.stringify({ quizId, rollNumber, name, answers }),
+      body: JSON.stringify({ quizId, rollNumber, name, answers, violations }),
     }),
   getLeaderboard: (quizId?: string) =>
     request<LeaderboardRow[]>(`/leaderboard${quizId ? `?quizId=${encodeURIComponent(quizId)}` : ''}`),
@@ -105,6 +106,11 @@ export const quizApi = {
     request<AdminQuiz>(`/admin/quizzes/${encodeURIComponent(quizId)}`, {
       method: 'PATCH',
       body: JSON.stringify({ action }),
+    }),
+  updateAdminQuizDuration: (quizId: string, duration: number) =>
+    request<AdminQuiz>(`/admin/quizzes/${encodeURIComponent(quizId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ duration }),
     }),
   deleteAdminQuiz: (quizId: string) =>
     request<void>(`/admin/quizzes/${encodeURIComponent(quizId)}`, { method: 'DELETE' }),

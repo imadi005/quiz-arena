@@ -36,18 +36,20 @@ export function QuizPage() {
   const name = sessionStorage.getItem('quizName') ?? rollNumber ?? ''
   const quizId = sessionStorage.getItem('quizId')
   const durationMinutes = Number(sessionStorage.getItem('quizDuration'))
-  const durationSeconds = durationMinutes > 0 ? durationMinutes * 60 : DEFAULT_DURATION_SECONDS
+  const initialDurationSeconds = durationMinutes > 0 ? durationMinutes * 60 : DEFAULT_DURATION_SECONDS
 
-  // Survive a page refresh mid-test: the timer is anchored to an absolute end
-  // time (not a countdown that resets to full duration on reload), and answers
-  // / current question are restored from sessionStorage instead of starting over.
-  const endAt = (() => {
-    const stored = Number(sessionStorage.getItem('quizEndAt'))
-    if (stored > Date.now()) return stored
-    const fresh = Date.now() + durationSeconds * 1000
-    sessionStorage.setItem('quizEndAt', String(fresh))
+  // Survive a page refresh mid-test: the timer is anchored to a fixed start time
+  // (not a countdown that resets to full duration on reload) plus a duration that
+  // can be adjusted later — the 5s status poll below picks up an admin changing
+  // the quiz's duration mid-test and extends/shortens the countdown accordingly.
+  const startAt = (() => {
+    const stored = Number(sessionStorage.getItem('quizStartAt'))
+    if (stored > 0) return stored
+    const fresh = Date.now()
+    sessionStorage.setItem('quizStartAt', String(fresh))
     return fresh
   })()
+  const durationSecondsRef = useRef(initialDurationSeconds)
 
   const [questions, setQuestions] = useState<PublicQuestion[] | null>(null)
   // order[displayPosition] = original question index. optionOrder[originalQuestionIndex]
@@ -63,9 +65,12 @@ export function QuizPage() {
     }
   })
   const [current, setCurrent] = useState(() => Number(sessionStorage.getItem('quizCurrent')) || 0)
-  const [secondsLeft, setSecondsLeft] = useState(() => Math.max(0, Math.round((endAt - Date.now()) / 1000)))
+  const [secondsLeft, setSecondsLeft] = useState(() =>
+    Math.max(0, initialDurationSeconds - Math.floor((Date.now() - startAt) / 1000)),
+  )
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [violations, setViolations] = useState(() => Number(sessionStorage.getItem('quizViolations')) || 0)
 
   useEffect(() => {
     sessionStorage.setItem('quizAnswers', JSON.stringify(answers))
@@ -75,6 +80,21 @@ export function QuizPage() {
     sessionStorage.setItem('quizCurrent', String(current))
   }, [current])
 
+  useEffect(() => {
+    sessionStorage.setItem('quizViolations', String(violations))
+  }, [violations])
+
+  // Anti-malpractice: counts every time the student leaves this tab (switches
+  // tabs, minimizes, switches app). Persisted so a refresh doesn't reset the
+  // count, and reported to the admin via submit() so it shows on the leaderboard.
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      if (document.hidden) setViolations((v) => v + 1)
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange)
+  }, [])
+
   // Avoids the submit-on-timeout closure capturing stale state.
   const answersRef = useRef(answers)
   answersRef.current = answers
@@ -82,6 +102,8 @@ export function QuizPage() {
   questionsRef.current = questions
   const submittingRef = useRef(submitting)
   submittingRef.current = submitting
+  const violationsRef = useRef(violations)
+  violationsRef.current = violations
 
   useEffect(() => {
     if (!rollNumber || !quizId) {
@@ -127,7 +149,8 @@ export function QuizPage() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const remaining = Math.max(0, Math.round((endAt - Date.now()) / 1000))
+      const elapsed = Math.floor((Date.now() - startAt) / 1000)
+      const remaining = Math.max(0, durationSecondsRef.current - elapsed)
       setSecondsLeft(remaining)
       if (remaining <= 0) {
         clearInterval(timer)
@@ -139,7 +162,9 @@ export function QuizPage() {
   }, [])
 
   // If the admin pauses or ends this quiz while a student is mid-test, don't leave
-  // them stuck on a blocking error — submit whatever they have automatically.
+  // them stuck on a blocking error — submit whatever they have automatically. This
+  // same poll also picks up the admin changing the quiz's duration mid-test, so
+  // the countdown extends/shortens without the student needing to refresh.
   useEffect(() => {
     if (!quizId) return
     const poll = setInterval(() => {
@@ -147,7 +172,13 @@ export function QuizPage() {
         .getQuizStatus()
         .then((status) => {
           const stillLive = status.live && status.quizId === quizId
-          if (!stillLive && !submittingRef.current) void handleSubmit(true)
+          if (!stillLive && !submittingRef.current) {
+            void handleSubmit(true)
+            return
+          }
+          if (stillLive && status.duration > 0) {
+            durationSecondsRef.current = status.duration * 60
+          }
         })
         .catch(() => {})
     }, 5000)
@@ -162,16 +193,17 @@ export function QuizPage() {
     setError(null)
     try {
       const orderedAnswers = qs.map((_, i) => answersRef.current[i] ?? -1)
-      const result = await quizApi.submit(quizId, rollNumber, name, orderedAnswers)
+      const result = await quizApi.submit(quizId, rollNumber, name, orderedAnswers, violationsRef.current)
       sessionStorage.removeItem('quizRollNumber')
       sessionStorage.removeItem('quizName')
       sessionStorage.removeItem('quizId')
       sessionStorage.removeItem('quizDuration')
-      sessionStorage.removeItem('quizEndAt')
+      sessionStorage.removeItem('quizStartAt')
       sessionStorage.removeItem('quizAnswers')
       sessionStorage.removeItem('quizCurrent')
       sessionStorage.removeItem('quizOrder')
       sessionStorage.removeItem('quizOptionOrder')
+      sessionStorage.removeItem('quizViolations')
       navigate('/result', { state: { rollNumber, name, autoEnded, ...result } })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not submit. Try again.')

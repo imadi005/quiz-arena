@@ -92,6 +92,7 @@ app.post('/api/submit', (req, res) => {
   const rollNumber = String(req.body.rollNumber || '').trim().toUpperCase()
   const name = String(req.body.name || '').trim()
   const answers = req.body.answers
+  const violations = Math.max(0, Number(req.body.violations) || 0)
 
   if (!quizId) return res.status(400).json({ message: 'quizId is required.' })
   if (!rollNumber) return res.status(400).json({ message: 'Roll number is required.' })
@@ -117,7 +118,7 @@ app.post('/api/submit', (req, res) => {
     if (answers[i] === q.correctAnswer) score += q.marks
   })
 
-  const attempt = { score, totalMarks: totalMarksOf(data), submittedAt: new Date().toISOString() }
+  const attempt = { score, totalMarks: totalMarksOf(data), submittedAt: new Date().toISOString(), violations }
   data.attempts[quizId][rollNumber] = [...existing, attempt]
   if (name) {
     data.names = data.names || {}
@@ -155,6 +156,7 @@ app.get('/api/leaderboard', (req, res) => {
         totalMarks: best.totalMarks,
         accuracy: best.totalMarks ? Math.round((best.score / best.totalMarks) * 1000) / 10 : 0,
         submittedAt: best.submittedAt,
+        violations: best.violations || 0,
       }
     })
 
@@ -242,7 +244,7 @@ app.post('/api/admin/quizzes', (req, res) => {
 })
 
 app.patch('/api/admin/quizzes/:quizId', (req, res) => {
-  const { action } = req.body
+  const { action, duration } = req.body
   const data = loadData()
   const quiz = data.quizzes.find((q) => q.quizId === req.params.quizId)
   if (!quiz) return res.status(404).json({ message: 'Quiz not found.' })
@@ -257,8 +259,18 @@ app.patch('/api/admin/quizzes/:quizId', (req, res) => {
     quiz.status = 'PAUSED'
   } else if (action === 'end') {
     quiz.status = 'COMPLETED'
-  } else {
+  } else if (action !== undefined) {
     return res.status(400).json({ message: 'Unknown action. Use start, pause, or end.' })
+  }
+
+  if (duration !== undefined) {
+    const minutes = Number(duration)
+    if (!Number.isFinite(minutes) || minutes <= 0) {
+      return res.status(400).json({ message: 'duration must be a positive number of minutes.' })
+    }
+    // Works even while LIVE — students already mid-test pick this up on their next
+    // quiz-status poll (every 5s) and their countdown extends/shrinks accordingly.
+    quiz.duration = minutes
   }
 
   saveData(data)

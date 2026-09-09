@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { quizId } = req.query
 
   if (req.method === 'PATCH') {
-    const { action } = req.body || {}
+    const { action, duration } = req.body || {}
     try {
       let updated
       await saveData((data) => {
@@ -21,8 +21,18 @@ export default async function handler(req, res) {
           quiz.status = 'PAUSED'
         } else if (action === 'end') {
           quiz.status = 'COMPLETED'
-        } else {
+        } else if (action !== undefined) {
           throw Object.assign(new Error('Unknown action. Use start, pause, or end.'), { status: 400 })
+        }
+
+        if (duration !== undefined) {
+          const minutes = Number(duration)
+          if (!Number.isFinite(minutes) || minutes <= 0) {
+            throw Object.assign(new Error('duration must be a positive number of minutes.'), { status: 400 })
+          }
+          // Works even while LIVE — students already mid-test pick this up on their
+          // next quiz-status poll (every 5s) and their countdown adjusts accordingly.
+          quiz.duration = minutes
         }
 
         updated = quiz
