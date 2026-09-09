@@ -281,62 +281,8 @@
       "category": "General"
     }
   ],
-  "quizzes": [
-    {
-      "quizId": "quiz1788892136687",
-      "title": "test",
-      "description": "test",
-      "duration": 8,
-      "status": "COMPLETED",
-      "createdAt": "2026-09-08T18:28:56.687Z"
-    }
-  ],
-  "attempts": {
-    "quiz1788892136687": {
-      "1234": [
-        {
-          "score": 4,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-09T04:23:41.796Z"
-        }
-      ],
-      "26MCAD30": [
-        {
-          "score": 18,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:32:39.424Z"
-        }
-      ],
-      "26MCAA17": [
-        {
-          "score": 19,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:46:39.273Z"
-        }
-      ],
-      "26BBAF02": [
-        {
-          "score": 8,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:54:07.272Z"
-        }
-      ],
-      "25BAIB53": [
-        {
-          "score": 7,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:57:41.850Z"
-        }
-      ],
-      "26MCAC67": [
-        {
-          "score": 9,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:57:45.126Z"
-        }
-      ]
-    }
-  },
+  "quizzes": [],
+  "attempts": {},
   "names": {
     "1234": "ok",
     "KJ23MCA001": "KJ23MCA001",
