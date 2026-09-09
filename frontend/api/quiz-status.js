@@ -6,7 +6,10 @@ export default async function handler(req, res) {
   try {
     const { data } = await getData()
     const live = getLiveQuiz(data)
-    setReadCache(res)
+    // Students poll this endpoint while taking a quiz. Keep it short enough
+    // that an admin pause/end reaches them promptly, while still sharing one
+    // GitHub read between every student on the same Vercel edge.
+    setReadCache(res, { sMaxAge: 5, staleWhileRevalidate: 5 })
     if (!live) return res.status(200).json({ live: false })
     res.status(200).json({
       live: true,

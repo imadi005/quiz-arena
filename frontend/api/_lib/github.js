@@ -96,8 +96,11 @@ export async function saveData(mutate) {
 // Vercel's CDN shares this cache between all visitors. Without it, each
 // student and every admin poll reaches GitHub separately and exhausts the
 // GitHub API limit very quickly.
-export function setReadCache(res) {
-  res.setHeader('Cache-Control', 'public, s-maxage=15, stale-while-revalidate=60')
+export function setReadCache(res, { sMaxAge = 15, staleWhileRevalidate = 60 } = {}) {
+  res.setHeader(
+    'Cache-Control',
+    `public, s-maxage=${sMaxAge}, stale-while-revalidate=${staleWhileRevalidate}`,
+  )
 }
 
 export function totalMarksOf(data) {

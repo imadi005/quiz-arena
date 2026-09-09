@@ -2,15 +2,15 @@
   "headers": [
     {
       "source": "/api/questions",
-      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=30, stale-while-revalidate=60" }]
     },
     {
       "source": "/api/quiz-status",
-      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=5, stale-while-revalidate=5" }]
     },
     {
       "source": "/api/leaderboard",
-      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=15, stale-while-revalidate=60" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=10, stale-while-revalidate=20" }]
     },
     {
       "source": "/api/attempts/:rollNumber",
