@@ -367,6 +367,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:23:20.746Z"
         }
+      ],
+      "26MCAD47": [
+        {
+          "score": 18,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:23:25.046Z"
+        }
       ]
     }
   },
@@ -388,6 +395,7 @@
     "25MCAA45": "Shiva",
     "25MCAA27": "JOHN",
     "25MCAA32": "Meljo",
-    "26MCAD06": "Anand"
+    "26MCAD06": "Anand",
+    "26MCAD47": "Vinu"
   }
 }
