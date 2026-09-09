@@ -306,6 +306,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:21:31.158Z"
         }
+      ],
+      "26MCAD60": [
+        {
+          "score": 3,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:21:34.329Z"
+        }
       ]
     }
   },
@@ -319,6 +326,7 @@
     "26MCAC67": "Priyanshu",
     "26MCAB11": "Greeshma",
     "26MCAA44": "Samuel Sk",
-    "25MCAA08": "Ankita"
+    "25MCAA08": "Ankita",
+    "26MCAD60": "Pruthvi"
   }
 }
