@@ -360,6 +360,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:23:19.500Z"
         }
+      ],
+      "26MCAD06": [
+        {
+          "score": 12,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:23:20.746Z"
+        }
       ]
     }
   },
@@ -380,6 +387,7 @@
     "25MCAA61": "Nayan",
     "25MCAA45": "Shiva",
     "25MCAA27": "JOHN",
-    "25MCAA32": "Meljo"
+    "25MCAA32": "Meljo",
+    "26MCAD06": "Anand"
   }
 }
