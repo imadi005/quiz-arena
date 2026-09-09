@@ -484,6 +484,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:24:49.969Z"
         }
+      ],
+      "26MCAB10": [
+        {
+          "score": 12,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:24:52.363Z"
+        }
       ]
     }
   },
@@ -521,6 +528,7 @@
     "26MCAA51": "Yuvraj",
     "23MCAD15": "Dosia",
     "26MCAA31": "Maria",
-    "26MCAC04": "Akshai S R"
+    "26MCAC04": "Akshai S R",
+    "26MCAB10": "Anushka"
   }
 }
