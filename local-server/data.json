@@ -540,6 +540,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:39:42.204Z"
         }
+      ],
+      "26MCAB40": [
+        {
+          "score": 19,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:39:54.898Z"
+        }
       ]
     }
   },
@@ -585,6 +592,7 @@
     "26MCAA34": "NAVEETHA K",
     "25MCAA14": "😎",
     "26MCAB38": "Nithyashree",
-    "26MCAB59": "Midhun k"
+    "26MCAB59": "Midhun k",
+    "26MCAB40": "Praveen K"
   }
 }
