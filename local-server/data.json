@@ -281,37 +281,15 @@
       "category": "General"
     }
   ],
-  "quizzes": [
-    {
-      "quizId": "quiz1788892136687",
-      "title": "test",
-      "description": "test",
-      "duration": 8,
-      "status": "LIVE",
-      "createdAt": "2026-09-08T18:28:56.687Z"
-    }
-  ],
-  "attempts": {
-    "quiz1788892136687": {
-      "26MCAD30": [
-        {
-          "score": 18,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:32:39.424Z"
-        }
-      ],
-      "26MCAA17": [
-        {
-          "score": 19,
-          "totalMarks": 20,
-          "submittedAt": "2026-09-08T18:46:39.273Z"
-        }
-      ]
-    }
-  },
+  "quizzes": [],
+  "attempts": {},
   "names": {
+    "1234": "ok",
     "KJ23MCA001": "KJ23MCA001",
     "26MCAD30": "26MCAD30",
-    "26MCAA17": "Dev"
+    "26MCAA17": "Dev",
+    "26BBAF02": "Agrim Gupta",
+    "25BAIB53": "Parmit singh",
+    "26MCAC67": "Priyanshu"
   }
 }
