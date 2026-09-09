@@ -603,6 +603,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:46:33.285Z"
         }
+      ],
+      "26MCAB32": [
+        {
+          "score": 15,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:46:53.482Z"
+        }
       ]
     }
   },
@@ -656,6 +663,7 @@
     "26MCAC24": "Gowtham",
     "26MCAD37": "shruti rani",
     "26MCAD40": "Soumi Saha",
-    "26MCAB27": "Jyotirmoy"
+    "26MCAB27": "Jyotirmoy",
+    "26MCAB32": "Sahid"
   }
 }
