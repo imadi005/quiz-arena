@@ -505,6 +505,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:24:55.514Z"
         }
+      ],
+      "26MCAA29": [
+        {
+          "score": 14,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:25:01.153Z"
+        }
       ]
     }
   },
@@ -545,6 +552,7 @@
     "26MCAC04": "Akshai S R",
     "26MCAB10": "Anushka",
     "25MCAB15": "💀",
-    "26MCAA21": "yuktha"
+    "26MCAA21": "yuktha",
+    "26MCAA29": "Krithika"
   }
 }
