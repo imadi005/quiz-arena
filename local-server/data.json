@@ -498,6 +498,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:24:53.697Z"
         }
+      ],
+      "26MCAA21": [
+        {
+          "score": 14,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:24:55.514Z"
+        }
       ]
     }
   },
@@ -537,6 +544,7 @@
     "26MCAA31": "Maria",
     "26MCAC04": "Akshai S R",
     "26MCAB10": "Anushka",
-    "25MCAB15": "💀"
+    "25MCAB15": "💀",
+    "26MCAA21": "yuktha"
   }
 }
