@@ -442,6 +442,13 @@
           "totalMarks": 20,
           "submittedAt": "2026-09-09T10:24:21.181Z"
         }
+      ],
+      "25MCAA40": [
+        {
+          "score": 18,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:24:24.262Z"
+        }
       ]
     }
   },
@@ -473,6 +480,7 @@
     "26MCAD21": "Jesin Sara",
     "26MCAD02": "AKARSH",
     "25MCAA58": "Bindu Shree",
-    "26MCCD59": "Alen"
+    "26MCCD59": "Alen",
+    "25MCAA40": "Sanyukta"
   }
 }
