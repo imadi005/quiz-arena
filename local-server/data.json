@@ -291,7 +291,17 @@
       "createdAt": "2026-09-09T10:14:26.237Z"
     }
   ],
-  "attempts": {},
+  "attempts": {
+    "quiz1788948866237": {
+      "26MCAA44": [
+        {
+          "score": 17,
+          "totalMarks": 20,
+          "submittedAt": "2026-09-09T10:20:55.704Z"
+        }
+      ]
+    }
+  },
   "names": {
     "1234": "ok",
     "KJ23MCA001": "KJ23MCA001",
@@ -300,6 +310,7 @@
     "26BBAF02": "Agrim Gupta",
     "25BAIB53": "Parmit singh",
     "26MCAC67": "Priyanshu",
-    "26MCAB11": "Greeshma"
+    "26MCAB11": "Greeshma",
+    "26MCAA44": "Samuel Sk"
   }
 }
