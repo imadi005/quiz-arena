@@ -22,18 +22,37 @@ async function ghFetch(url, options = {}) {
   })
   if (!res.ok) {
     const text = await res.text()
-    const err = new Error(`GitHub API ${res.status}: ${text}`)
+    const isRateLimited = res.status === 429 || (res.status === 403 && /rate limit/i.test(text))
+    const err = new Error(
+      isRateLimited
+        ? 'The quiz service is temporarily busy. Please wait a minute and try again.'
+        : `GitHub API ${res.status}: ${text}`,
+    )
     err.status = res.status
     throw err
   }
   return res.json()
 }
 
-export async function getData() {
+// Every request used to hit the GitHub API, and with students + admin pages all
+// polling, that blows through GitHub's 5000/hour rate limit fast. Reads are served
+// from a short-lived in-memory cache instead (warm serverless instances reuse it),
+// which collapses the polling traffic into a couple of calls per minute.
+const CACHE_TTL_MS = 60_000
+let cache = null // { data, sha, fetchedAt }
+
+export async function getData({ fresh = false } = {}) {
+  if (!fresh && cache && Date.now() - cache.fetchedAt < CACHE_TTL_MS) {
+    // Deep copy so a caller mutating the result can't corrupt the cached copy.
+    return { data: structuredClone(cache.data), sha: cache.sha }
+  }
+
   const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`
   const file = await ghFetch(url)
   const content = Buffer.from(file.content, 'base64').toString('utf-8')
-  return { data: JSON.parse(content), sha: file.sha }
+  const data = JSON.parse(content)
+  cache = { data: structuredClone(data), sha: file.sha, fetchedAt: Date.now() }
+  return { data, sha: file.sha }
 }
 
 // mutate(data) must return the updated data, or throw to abort with no write.
@@ -48,7 +67,9 @@ export async function saveData(mutate) {
   }
   let lastErr
   for (let attempt = 0; attempt < 3; attempt++) {
-    const { data, sha } = await getData()
+    // A write must always use the latest file SHA. A cached SHA produces a
+    // conflict and adds avoidable GitHub traffic when several students submit.
+    const { data, sha } = await getData({ fresh: true })
     const next = mutate(data)
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`
     try {
@@ -61,6 +82,7 @@ export async function saveData(mutate) {
           branch: BRANCH,
         }),
       })
+      cache = { data: structuredClone(next), sha: null, fetchedAt: Date.now() }
       return next
     } catch (err) {
       lastErr = err
@@ -69,6 +91,13 @@ export async function saveData(mutate) {
     }
   }
   throw lastErr
+}
+
+// Vercel's CDN shares this cache between all visitors. Without it, each
+// student and every admin poll reaches GitHub separately and exhausts the
+// GitHub API limit very quickly.
+export function setReadCache(res) {
+  res.setHeader('Cache-Control', 'public, s-maxage=15, stale-while-revalidate=60')
 }
 
 export function totalMarksOf(data) {

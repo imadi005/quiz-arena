@@ -1,9 +1,10 @@
-import { getData, saveData } from '../_lib/github.js'
+import { getData, saveData, setReadCache } from '../_lib/github.js'
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const { data } = await getData()
+      setReadCache(res)
       res.status(200).json(data.questions)
     } catch (err) {
       res.status(500).json({ message: err.message })

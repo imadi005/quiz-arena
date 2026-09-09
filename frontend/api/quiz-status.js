@@ -1,4 +1,4 @@
-import { getData } from './_lib/github.js'
+import { getData, setReadCache } from './_lib/github.js'
 import { getLiveQuiz } from './_lib/quiz.js'
 
 export default async function handler(req, res) {
@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   try {
     const { data } = await getData()
     const live = getLiveQuiz(data)
+    setReadCache(res)
     if (!live) return res.status(200).json({ live: false })
     res.status(200).json({
       live: true,

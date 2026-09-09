@@ -1,4 +1,4 @@
-import { getData, totalMarksOf } from '../_lib/github.js'
+import { getData, setReadCache, totalMarksOf } from '../_lib/github.js'
 
 const MAX_ATTEMPTS = 3
 
@@ -13,6 +13,7 @@ export default async function handler(req, res) {
     const attemptsForQuiz = (data.attempts || {})[quizId] || {}
     const attempts = attemptsForQuiz[rollNumber] || []
     const bestScore = attempts.length ? Math.max(...attempts.map((a) => a.score)) : null
+    setReadCache(res)
     res.status(200).json({
       rollNumber,
       quizId,

@@ -1,4 +1,4 @@
-import { getData, saveData } from '../_lib/github.js'
+import { getData, saveData, setReadCache } from '../_lib/github.js'
 import { quizStats } from '../_lib/quiz.js'
 
 export default async function handler(req, res) {
@@ -10,6 +10,7 @@ export default async function handler(req, res) {
         questionCount: data.questions.length,
         ...quizStats(data, q.quizId),
       }))
+      setReadCache(res)
       res.status(200).json(list)
     } catch (err) {
       res.status(500).json({ message: err.message })
